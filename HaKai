@@ -285,6 +285,8 @@ Window:MakeTab({
     Callback = function()
         _G.AutoStrength = false
         _G.AutoStrength2 = false
+        _G.AutoDumbbell = false  
+        _G.AutoDumbbell2 = false
         _G.AutoHealth = false
         _G.AutoHealth2 = false
         _G.AutoStamina = false
