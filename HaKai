@@ -14,26 +14,15 @@ pcall(function()
 end)
 
 --GLOBALS (Cacheadas para otimização)
-local LP = game.Players.LocalPlayer
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local Workspace = workspace
 
-_G.StopStrength = false
-_G.StopStrength2 = false
-_G.StopDumbbell = false  
-_G.StopDumbbell2 = false
-_G.StopDumbbell3 = false
-_G.StopHealth = false
-_G.StopHealth2 = false
-_G.StopStamina = false
 _G.FarmDelay = 0.00000000000000000000000001
 
-local function BurstFarm(remote, args, damageRemote, humanoid, burstSize, burstDelay, loopCount, stopFlag)
+local function BurstFarm(remote, args, damageRemote, humanoid, burstSize, burstDelay, loopCount)
     for _ = 1, burstSize do
-        if stopFlag then return end 
         for i = 1, loopCount do
-            if stopFlag then return end 
             pcall(function() 
                 if remote then remote:FireServer(unpack(args)) end
                 if damageRemote and humanoid then damageRemote:FireServer(humanoid, 15, false) end
@@ -43,50 +32,17 @@ local function BurstFarm(remote, args, damageRemote, humanoid, burstSize, burstD
     end
 end
 
---Valor
-_G.AutoStrength = false  
-local StrengthConnection
-function AutoStrength()
-    if StrengthConnection then StrengthConnection:Disconnect() end
-    _G.StopStrength = false 
-    StrengthConnection = RunService.Heartbeat:Connect(function() 
-        if not _G.AutoStrength or _G.StopStrength then return end
-        local damageRemote = ReplicatedStorage:WaitForChild("DamageRemote")
-        local punchingBagHumanoid = Workspace:WaitForChild("PunchingBag"):WaitForChild("PunchingBag"):WaitForChild("Humanoid")
-        task.spawn(function() BurstFarm(nil, nil, damageRemote, punchingBagHumanoid, 1, 0.00000000000000000000000001, 71, _G.StopStrength) end)
-        task.spawn(function() BurstFarm(nil, nil, damageRemote, punchingBagHumanoid, 1, 0.00000000000000000000000001, 71, _G.StopStrength) end)
-        task.spawn(function() BurstFarm(nil, nil, damageRemote, punchingBagHumanoid, 1, 0.00000000000000000000000001, 71, _G.StopStrength) end)
-    end)
-end
-
---Valor
-_G.AutoStrength2 = false  
-local Strength2Connection 
-function AutoStrength2()
-    if Strength2Connection then Strength2Connection:Disconnect() end 
-    _G.StopStrength2 = false 
-    Strength2Connection = RunService.Stepped:Connect(function() 
-        if not _G.AutoStrength2 or _G.StopStrength2 then return end
-        local damageRemote = ReplicatedStorage:WaitForChild("DamageRemote")
-        local punchingBagHumanoid = Workspace:WaitForChild("PunchingBag"):WaitForChild("PunchingBag"):WaitForChild("Humanoid")
-        task.spawn(function() for i = 1, 71 do if _G.StopStrength2 then return end pcall(function() damageRemote:FireServer(punchingBagHumanoid, 15, false) end) end end)
-        task.spawn(function() for i = 1, 71 do if _G.StopStrength2 then return end pcall(function() damageRemote:FireServer(punchingBagHumanoid, 15, false) end) end end)
-        task.spawn(function() for i = 1, 71 do if _G.StopStrength2 then return end pcall(function() damageRemote:FireServer(punchingBagHumanoid, 15, false) end) end end)
-    end)
-end
-
 _G.AutoDumbbell = false  
 local DumbbellConnection
 function AutoDumbbell()
     if DumbbellConnection then DumbbellConnection:Disconnect() end
-    _G.StopDumbbell = false
     DumbbellConnection = RunService.Heartbeat:Connect(function()
-        if not _G.AutoDumbbell or _G.StopDumbbell then return end
+        if not _G.AutoDumbbell then return end
         local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Equipment")
         local args = {"Workout", {Name = "Dumbbell"}}
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.000000000000000000000000001, 71, _G.StopDumbbell) end)
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.000000000000000000000000001, 71, _G.StopDumbbell) end)
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.000000000000000000000000001, 71, _G.StopDumbbell) end)
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.000000000000000000000000001, 71) end)
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.000000000000000000000000001, 71) end)
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.000000000000000000000000001, 71) end)
         if getgenv().Kevin then
             task.spawn(function()
                 while getgenv().Kevin do
@@ -109,14 +65,13 @@ _G.AutoDumbbell2 = false
 local Dumbbell2Connection
 function AutoDumbbell2()
     if Dumbbell2Connection then Dumbbell2Connection:Disconnect() end
-    _G.StopDumbbell2 = false
     Dumbbell2Connection = RunService.Stepped:Connect(function()
-        if not _G.AutoDumbbell2 or _G.StopDumbbell2 then return end
+        if not _G.AutoDumbbell2 then return end
         local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Equipment")
         local args = {"Workout", {Name = "Dumbbell"}}
-        task.spawn(function() for i = 1, 71 do if _G.StopDumbbell2 then return end pcall(function() remote:FireServer(unpack(args)) end) end end)
-        task.spawn(function() for i = 1, 71 do if _G.StopDumbbell2 then return end pcall(function() remote:FireServer(unpack(args)) end) end end)
-        task.spawn(function() for i = 1, 71 do if _G.StopDumbbell2 then return end pcall(function() remote:FireServer(unpack(args)) end) end end)
+        task.spawn(function() for i = 1, 71 do pcall(function() remote:FireServer(unpack(args)) end) end end)
+        task.spawn(function() for i = 1, 71 do pcall(function() remote:FireServer(unpack(args)) end) end end)
+        task.spawn(function() for i = 1, 71 do pcall(function() remote:FireServer(unpack(args)) end) end end)
         if getgenv().Kevin then
             task.spawn(function()
                 while getgenv().Kevin do
@@ -140,14 +95,13 @@ _G.AutoDumbbell3 = false
 local Dumbbell3Connection
 function AutoDumbbell3()
     if Dumbbell3Connection then Dumbbell3Connection:Disconnect() end
-    _G.StopDumbbell3 = false
     Dumbbell3Connection = RunService.Heartbeat:Connect(function()
-        if not _G.AutoDumbbell3 or _G.StopDumbbell3 then return end
+        if not _G.AutoDumbbell3 then return end
         local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Equipment")
         local args = {"Workout", {Name = "Dumbbell"}}
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.000000000000000000000000001, 71, _G.StopDumbbell3) end)
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.000000000000000000000000001, 71, _G.StopDumbbell3) end)
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.000000000000000000000000001, 71, _G.StopDumbbell3) end)
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.000000000000000000000000001, 71) end)
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.000000000000000000000000001, 71) end)
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.000000000000000000000000001, 71) end)
         if getgenv().Kevin then
             task.spawn(function()
                 while getgenv().Kevin do
@@ -177,33 +131,6 @@ local FarmTab1 = Window:MakeTab({
 local Section = FarmTab1:AddSection({
     Name = "AutoFarm"
 })
-FarmTab1:AddToggle({
-    Name = "Auto-Strength",
-    Default = false,
-    Callback = function(Value)
-        _G.AutoStrength = Value
-        if Value then
-            AutoStrength()
-        else
-            _G.StopStrength = true 
-            if StrengthConnection then StrengthConnection:Disconnect() end
-        end
-    end
-})
-
-FarmTab1:AddToggle({
-    Name = "Auto-Strength2",
-    Default = false,
-    Callback = function(Value)
-        _G.AutoStrength2 = Value
-        if Value then
-            AutoStrength2()
-        else
-            _G.StopStrength2 = true 
-            if Strength2Connection then Strength2Connection:Disconnect() end
-        end
-    end
-})
 
 FarmTab1:AddToggle({
     Name = "Auto-Dumbbell",
@@ -213,7 +140,6 @@ FarmTab1:AddToggle({
         if Value then
             AutoDumbbell()
         else
-            _G.StopDumbbell = true
             if DumbbellConnection then DumbbellConnection:Disconnect() end
         end
     end
@@ -227,7 +153,6 @@ FarmTab1:AddToggle({
         if Value then
             AutoDumbbell2()
         else
-            _G.StopDumbbell2 = true
             if Dumbbell2Connection then Dumbbell2Connection:Disconnect() end
         end
     end
@@ -241,7 +166,6 @@ FarmTab1:AddToggle({
         if Value then
             AutoDumbbell3()
         else
-            _G.StopDumbbell3 = true
             if Dumbbell3Connection then Dumbbell3Connection:Disconnect() end
         end
     end
@@ -250,16 +174,15 @@ FarmTab1:AddToggle({
 local HealthConnection 
 function AutoHealth()
     if HealthConnection then HealthConnection:Disconnect() end 
-    _G.StopHealth = false 
     HealthConnection = RunService.Heartbeat:Connect(function()
-        if not _G.AutoHealth or _G.StopHealth then return end
+        if not _G.AutoHealth then return end
         local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Equipment")
         local args = {"Workout", {Name = "PushUp"}}
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71, _G.StopHealth) end) 
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71, _G.StopHealth) end) 
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71, _G.StopHealth) end)
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71, _G.StopHealth) end)
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71, _G.StopHealth) end)
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71) end) 
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71) end) 
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71) end)
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71) end)
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71) end)
         if getgenv().Kevin and getgenv().Kevin == true then
             task.spawn(function()
                 while getgenv().Kevin do
@@ -298,7 +221,6 @@ AutoTab:AddToggle({
         if Value then
             AutoHealth()
         else
-            _G.StopHealth = true 
             if HealthConnection then HealthConnection:Disconnect() end
         end
     end
@@ -308,16 +230,15 @@ AutoTab:AddToggle({
 local Health2Connection 
 function AutoHealth2()
     if Health2Connection then Health2Connection:Disconnect() end 
-    _G.StopHealth2 = false 
     Health2Connection = RunService.Heartbeat:Connect(function()
-        if not _G.AutoHealth2 or _G.StopHealth2 then return end
+        if not _G.AutoHealth2 then return end
         local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Equipment")
         local args = {"Workout", {Name = "PushUp"}}
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71, _G.StopHealth2) end) 
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71, _G.StopHealth2) end) 
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71, _G.StopHealth2) end)
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71, _G.StopHealth2) end)
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71, _G.StopHealth2) end)
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71) end) 
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71) end) 
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71) end)
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71) end)
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71) end)
         if getgenv().Kevin then
             task.spawn(function()
                 while getgenv().Kevin do
@@ -346,7 +267,6 @@ AutoTab:AddToggle({
         if Value then
             AutoHealth2()
         else
-            _G.StopHealth2 = true 
             if Health2Connection then Health2Connection:Disconnect() end
         end
     end
@@ -357,14 +277,13 @@ _G.AutoStamina = false
 local StaminaConnection 
 function AutoStamina()
     if StaminaConnection then StaminaConnection:Disconnect() end
-    _G.StopStamina = false 
     StaminaConnection = RunService.Heartbeat:Connect(function()
-        if not _G.AutoStamina or _G.StopStamina then return end
+        if not _G.AutoStamina then return end
         local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Equipment")
         local args = {"Workout", {Name = "SitUp"}}
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71, _G.StopStamina) end)
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71, _G.StopStamina) end)
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71, _G.StopStamina) end)
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71) end)
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71) end)
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71) end)
     end)
 end
 
@@ -385,37 +304,8 @@ FarmTab3:AddToggle({
         if Value then
             AutoStamina()
         else
-            _G.StopStamina = true
             if StaminaConnection then StaminaConnection:Disconnect() end
         end
-    end
-})
-
-Window:MakeTab({
-    Name = "Emergency",
-    Icon = "rbxassetid://4483345998"
-}):AddButton({
-    Name = "Stop All Farming",
-    Callback = function()
-        _G.AutoStrength = false
-        _G.AutoStrength2 = false
-        _G.AutoDumbbell = false  
-        _G.AutoDumbbell2 = false
-        _G.AutoDumbbell3 = false
-        _G.AutoHealth = false
-        _G.AutoHealth2 = false
-        _G.AutoStamina = false
-        _G.StopStrength = true
-        _G.StopStrength2 = true
-        _G.StopHealth = true
-        _G.StopHealth2 = true
-        _G.StopStamina = true
-        if StrengthConnection then StrengthConnection:Disconnect() end
-        if Strength2Connection then Strength2Connection:Disconnect() end
-        if HealthConnection then HealthConnection:Disconnect() end
-        if Health2Connection then Health2Connection:Disconnect() end
-        if StaminaConnection then StaminaConnection:Disconnect() end
-        print("All farming stopped!")
     end
 })
 
