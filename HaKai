@@ -37,28 +37,15 @@ _G.AutoDumbbell = false
 local DumbbellConnection
 function AutoDumbbell()
     if DumbbellConnection then DumbbellConnection:Disconnect() end
+    _G.StopDumbbell = false
     DumbbellConnection = RunService.Heartbeat:Connect(function()
-        if not _G.AutoDumbbell then return end
+        if not _G.AutoDumbbell or _G.StopDumbbell then return end
         local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Equipment")
         local args = {"Workout", {Name = "Dumbbell"}}
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.000000000000000000000000001, 71) end)
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.000000000000000000000000001, 71) end)
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.000000000000000000000000001, 71) end)
-        if getgenv().Kevin then
-            task.spawn(function()
-                while getgenv().Kevin do
-                    if not getgenv().Kevin then break end
-                    pcall(function()
-                        local remote = game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Equipment")
-                        local args = {"Workout", {Name = "Dumbbell"}}
-                        remote:FireServer(unpack(args))
-                        remote:FireServer(unpack(args))
-                        remote:FireServer(unpack(args))
-                    end)
-                    task.wait(0.000000000000000000000000001)  
-                end
-            end)
-        end
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 50, _G.StopDumbbell) end)
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 50, _G.StopDumbbell) end)
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 50, _G.StopDumbbell) end)
+        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 50, _G.StopDumbbell) end)
     end)
 end
 
@@ -66,60 +53,14 @@ _G.AutoDumbbell2 = false
 local Dumbbell2Connection
 function AutoDumbbell2()
     if Dumbbell2Connection then Dumbbell2Connection:Disconnect() end
+    _G.StopDumbbell2 = false
     Dumbbell2Connection = RunService.Stepped:Connect(function()
-        if not _G.AutoDumbbell2 then return end
+        if not _G.AutoDumbbell2 or _G.StopDumbbell2 then return end
         local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Equipment")
         local args = {"Workout", {Name = "Dumbbell"}}
-        task.spawn(function() for i = 1, 71 do pcall(function() remote:FireServer(unpack(args)) end) end end)
-        task.spawn(function() for i = 1, 71 do pcall(function() remote:FireServer(unpack(args)) end) end end)
-        task.spawn(function() for i = 1, 71 do pcall(function() remote:FireServer(unpack(args)) end) end end)
-        if getgenv().Kevin then
-            task.spawn(function()
-                while getgenv().Kevin do
-                    if not getgenv().Kevin then break end
-                    pcall(function()
-                        local remote = game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Equipment")
-                        local args = {"Workout", {Name = "Dumbbell"}}
-                        remote:FireServer(unpack(args))
-                        remote:FireServer(unpack(args))
-                        remote:FireServer(unpack(args))
-                        remote:FireServer(unpack(args))
-                    end)
-                    task.wait(0.000000000000000000000000001)
-                end
-            end)
-        end
-    end)
-end
-
-_G.AutoDumbbell3 = false  
-local Dumbbell3Connection
-function AutoDumbbell3()
-    if Dumbbell3Connection then Dumbbell3Connection:Disconnect() end
-    Dumbbell3Connection = RunService.Heartbeat:Connect(function()
-        if not _G.AutoDumbbell3 then return end
-        local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Equipment")
-        local args = {"Workout", {Name = "Dumbbell"}}
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.000000000000000000000000001, 71) end)
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.000000000000000000000000001, 71) end)
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.000000000000000000000000001, 71) end)
-        if getgenv().Kevin then
-            task.spawn(function()
-                while getgenv().Kevin do
-                    if not getgenv().Kevin then break end
-                    pcall(function()
-                        local remote = game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Equipment")
-                        local args = {"Workout", {Name = "Dumbbell"}}
-                        remote:FireServer(unpack(args))
-                        remote:FireServer(unpack(args))
-                        remote:FireServer(unpack(args))
-                        remote:FireServer(unpack(args))
-                        remote:FireServer(unpack(args))
-                    end)
-                    task.wait(0.000000000000000000000000001)  
-                end
-            end)
-        end
+        task.spawn(function() for i = 1, 50 do if _G.StopDumbbell2 then return end pcall(function() remote:FireServer(unpack(args)) end) end end)
+        task.spawn(function() for i = 1, 50 do if _G.StopDumbbell2 then return end pcall(function() remote:FireServer(unpack(args)) end) end end)
+        task.spawn(function() for i = 1, 50 do if _G.StopDumbbell2 then return end pcall(function() remote:FireServer(unpack(args)) end) end end)
     end)
 end
 
