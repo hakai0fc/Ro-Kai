@@ -33,19 +33,23 @@ local function BurstFarm(remote, args, damageRemote, humanoid, burstSize, burstD
     end
 end
 
-_G.AutoDumbbell = false  
-local DumbbellConnection
 function AutoDumbbell()
-    if DumbbellConnection then DumbbellConnection:Disconnect() end
     _G.StopDumbbell = false
-    DumbbellConnection = RunService.Heartbeat:Connect(function()
-        if not _G.AutoDumbbell or _G.StopDumbbell then return end
-        local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Equipment")
-        local args = {"Workout", {Name = "Dumbbell"}}
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 50, _G.StopDumbbell) end)
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 50, _G.StopDumbbell) end)
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 50, _G.StopDumbbell) end)
-        task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 50, _G.StopDumbbell) end)
+    task.spawn(function()
+        while _G.AutoDumbbell and not _G.StopDumbbell do
+            for i = 1, 55 do
+                for j = 1, 10 do
+                    for _ = 1, 12 do
+                        task.spawn(function()
+                            remote:FireServer(unpack(args))
+                            remote:FireServer(unpack(args))
+                            remote:FireServer(unpack(args))
+                        end)
+                    end
+                end
+                task.wait(0)
+            end
+        end
     end)
 end
 
