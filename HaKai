@@ -41,7 +41,7 @@ function AutoDumbbell()
             local args = {"Workout", {Name = "Dumbbell"}}
             for i = 1, 55 do
                 for j = 1, 10 do
-                    for _ = 1, 12 do
+                    for _ = 1, 10 do
                         task.spawn(function()
                             remote:FireServer(unpack(args))
                             remote:FireServer(unpack(args))
