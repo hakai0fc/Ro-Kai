@@ -19,7 +19,7 @@ local RunService = game:GetService("RunService")
 local Workspace = workspace
 
 getgenv().Kevin = false
-_G.FarmDelay = 0.00000000000000000000000001
+_G.FarmDelay = 0 
 
 local function BurstFarm(remote, args, damageRemote, humanoid, burstSize, burstDelay, loopCount)
     for _ = 1, burstSize do
@@ -37,6 +37,8 @@ function AutoDumbbell()
     _G.StopDumbbell = false
     task.spawn(function()
         while _G.AutoDumbbell and not _G.StopDumbbell do
+            local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Equipment")
+            local args = {"Workout", {Name = "Dumbbell"}}
             for i = 1, 55 do
                 for j = 1, 10 do
                     for _ = 1, 12 do
@@ -68,6 +70,21 @@ function AutoDumbbell2()
     end)
 end
 
+_G.AutoDumbbell3 = false  
+local Dumbbell3Connection
+function AutoDumbbell3()
+    if Dumbbell3Connection then Dumbbell3Connection:Disconnect() end
+    _G.StopDumbbell3 = false
+    Dumbbell3Connection = RunService.Stepped:Connect(function()
+        if not _G.AutoDumbbell3 or _G.StopDumbbell3 then return end
+        local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Equipment")
+        local args = {"Workout", {Name = "Dumbbell"}}
+        task.spawn(function() for i = 1, 50 do if _G.StopDumbbell3 then return end pcall(function() remote:FireServer(unpack(args)) end) end end)
+        task.spawn(function() for i = 1, 50 do if _G.StopDumbbell3 then return end pcall(function() remote:FireServer(unpack(args)) end) end end)
+        task.spawn(function() for i = 1, 50 do if _G.StopDumbbell3 then return end pcall(function() remote:FireServer(unpack(args)) end) end end)
+    end)
+end
+
 --Main
 local FarmTab1 = Window:MakeTab({
     Name = "FarmStrength",
@@ -86,7 +103,7 @@ FarmTab1:AddToggle({
         if Value then
             AutoDumbbell()
         else
-            if DumbbellConnection then DumbbellConnection:Disconnect() end
+            _G.StopDumbbell = true 
         end
     end
 })
@@ -129,24 +146,7 @@ function AutoHealth()
         task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71) end)
         task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71) end)
         task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71) end)
-        if getgenv().Kevin and getgenv().Kevin == true then
-            task.spawn(function()
-                while getgenv().Kevin do
-                    if not getgenv().Kevin then break end
-                    local success, err = pcall(function()
-                        local remote = game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Equipment")
-                        local args = {"Workout", {Name = "PushUp"}}
-                        remote:FireServer(unpack(args))
-                        remote:FireServer(unpack(args))
-                        remote:FireServer(unpack(args))
-                        remote:FireServer(unpack(args))
-                        remote:FireServer(unpack(args))
-                    end)
-                    if not success then warn("Erro no loop Kevin (Health): " .. err) end
-                    task.wait(_G.FarmDelay)
-                end
-            end)
-        end
+        -- Removido loop Kevin redundante; se precisar, ative separadamente
     end)
 end
 
@@ -185,23 +185,7 @@ function AutoHealth2()
         task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71) end)
         task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71) end)
         task.spawn(function() BurstFarm(remote, args, nil, nil, 1, 0.00000000000000000000000001, 71) end)
-        if getgenv().Kevin then
-            task.spawn(function()
-                while getgenv().Kevin do
-                    if not getgenv().Kevin then break end
-                    pcall(function()
-                        local remote = game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Equipment")
-                        local args = {"Workout", {Name = "PushUp"}}
-                        remote:FireServer(unpack(args))
-                        remote:FireServer(unpack(args))
-                        remote:FireServer(unpack(args))
-                        remote:FireServer(unpack(args))
-                        remote:FireServer(unpack(args))
-                    end)
-                    task.wait(_G.FarmDelay)
-                end
-            end)
-        end
+        -- Removido loop Kevin redundante
     end)
 end
 
