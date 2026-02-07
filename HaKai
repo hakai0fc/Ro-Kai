@@ -4,15 +4,6 @@ local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/hak
 --Main Script
 local Window = OrionLib:MakeWindow({Name = "HaKai OP", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest", IntroEnabled = false})
 
---ANTI AFK
-pcall(function()
-    local VirtualUser = game:service'VirtualUser'
-    game:service'Players'.LocalPlayer.Idled:connect(function()
-        VirtualUser:CaptureController()
-        VirtualUser:ClickButton2(Vector2.new())
-    end)
-end)
-
 --GLOBALS (Cacheadas para otimização)
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
